@@ -115,7 +115,7 @@ async def main():
         for path in paths_train:
             shutil.copyfile(os.path.join(crawler.download_folder_path, path).strip(), os.path.join(datasets_train_label_path, path).strip())
         for path in paths_validation:
-            shutil.copyfile(os.path.join(crawler.download_folder_path, path).strip(), os.path.join.join(datasets_validation_label_path, path).strip())
+            shutil.copyfile(os.path.join(crawler.download_folder_path, path).strip(), os.path.join(datasets_validation_label_path, path).strip())
         for path in paths_test:
             shutil.copyfile(os.path.join(crawler.download_folder_path, path).strip(), os.path.join(datasets_test_label_path, path).strip())
 
