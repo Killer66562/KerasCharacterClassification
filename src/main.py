@@ -97,7 +97,7 @@ async def main():
             urls = random.sample(urls, k=500)
             await crawler.download_images_async(urls=urls)
 
-        paths = crawler.download_folder_path
+        paths = os.listdir(crawler.download_folder_path)
         paths_len = len(paths)
         paths_train = random.sample(paths, k=int(paths_len * 0.6))
         paths_other = [path for path in paths if path not in paths_train]
