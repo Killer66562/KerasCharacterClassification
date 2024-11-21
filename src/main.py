@@ -86,11 +86,11 @@ async def main():
     
     for label in labels:
         crawler.tags_str = label
-        crawler.download_folder_path = os.path.join(datasets_raw_path, label)
+        crawler.download_folder_path = os.path.join(datasets_raw_path, label).strip()
 
-        datasets_train_label_path = os.path.join(datasets_train_path, label)
-        datasets_validation_label_path = os.path.join(datasets_validation_path, label)
-        datasets_test_label_path = os.path.join(datasets_test_path, label)
+        datasets_train_label_path = os.path.join(datasets_train_path, label).strip()
+        datasets_validation_label_path = os.path.join(datasets_validation_path, label).strip()
+        datasets_test_label_path = os.path.join(datasets_test_path, label).strip()
 
         if not os.path.exists(crawler.download_folder_path):
             urls = await crawler.get_image_urls_async()
@@ -113,11 +113,11 @@ async def main():
             os.mkdir(datasets_test_label_path)
 
         for path in paths_train:
-            shutil.copyfile(os.path.join(crawler.download_folder_path, path), os.path.join(datasets_train_label_path, path))
+            shutil.copyfile(os.path.join(crawler.download_folder_path, path).strip(), os.path.join(datasets_train_label_path, path).strip())
         for path in paths_validation:
-            shutil.copyfile(os.path.join(crawler.download_folder_path, path), os.path.join.join(datasets_validation_label_path, path))
+            shutil.copyfile(os.path.join(crawler.download_folder_path, path).strip(), os.path.join.join(datasets_validation_label_path, path).strip())
         for path in paths_test:
-            shutil.copyfile(os.path.join(crawler.download_folder_path, path), os.path.join(datasets_test_label_path, path))
+            shutil.copyfile(os.path.join(crawler.download_folder_path, path).strip(), os.path.join(datasets_test_label_path, path).strip())
 
     datasets_train = image_dataset_from_directory(
         datasets_train_path, 
