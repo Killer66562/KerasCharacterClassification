@@ -84,7 +84,7 @@ async def main():
     datasets_validation_path = os.path.join(datasets_root_path, "validation")
     datasets_test_path = os.path.join(datasets_root_path, "test")
 
-    print(labels)
+    labels = [label.strip() for label in labels]
     
     for label in labels:
         crawler.tags_str = label
