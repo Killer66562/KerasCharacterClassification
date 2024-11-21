@@ -77,16 +77,27 @@ async def main():
         labels = file.readlines()
     labels_len = len(labels)
 
+    datasets_root_path = "datasets"
+
+    datasets_raw_path = os.path.join(datasets_root_path, "raw")
+    datasets_train_path = os.path.join(datasets_root_path, "train")
+    datasets_validation_path = os.path.join(datasets_root_path, "validation")
+    datasets_test_path = os.path.join(datasets_root_path, "test")
+    
     for label in labels:
         crawler.tags_str = label
-        crawler.download_folder_path = f"datasets/raw/{label}"
+        crawler.download_folder_path = datasets_raw_path.join(label)
+
+        datasets_train_label_path = datasets_train_path.join(label)
+        datasets_validation_label_path = datasets_validation_path.join(label)
+        datasets_test_label_path = datasets_test_path.join(label)
 
         if not os.path.exists(crawler.download_folder_path):
             urls = await crawler.get_image_urls_async()
             urls = random.sample(urls, k=500)
             await crawler.download_images_async(urls=urls)
 
-        paths = os.listdir(f"datasets/raw/{label}")
+        paths = crawler.download_folder_path
         paths_len = len(paths)
         paths_train = random.sample(paths, k=int(paths_len * 0.6))
         paths_other = [path for path in paths if path not in paths_train]
@@ -94,22 +105,22 @@ async def main():
         paths_validation = random.sample(paths_other, k=int(paths_other_len * 0.5))
         paths_test = [path for path in paths_other if path not in paths_validation]
 
-        if not os.path.exists(f"datasets/train/{label}"):
-            os.mkdir(f"datasets/train/{label}")
-        if not os.path.exists(f"datasets/validation/{label}"):
-            os.mkdir(f"datasets/validation/{label}")
-        if not os.path.exists(f"datasets/test/{label}"):
-            os.mkdir(f"datasets/test/{label}")
+        if not os.path.exists(datasets_train_label_path):
+            os.mkdir(datasets_train_label_path)
+        if not os.path.exists(datasets_validation_label_path):
+            os.mkdir(datasets_validation_label_path)
+        if not os.path.exists(datasets_test_label_path):
+            os.mkdir(datasets_test_label_path)
 
         for path in paths_train:
-            shutil.copyfile(f"datasets/raw/{label}/{path}", f"datasets/train/{label}/{path}")
+            shutil.copyfile(crawler.download_folder_path.join(path), datasets_train_label_path.join(path))
         for path in paths_validation:
-            shutil.copyfile(f"datasets/raw/{label}/{path}", f"datasets/validation/{label}/{path}")
+            shutil.copyfile(crawler.download_folder_path.join(path), datasets_validation_label_path.join(path))
         for path in paths_test:
-            shutil.copyfile(f"datasets/raw/{label}/{path}", f"datasets/test/{label}/{path}")
+            shutil.copyfile(crawler.download_folder_path.join(path), datasets_test_label_path.join(path))
 
     datasets_train = image_dataset_from_directory(
-        "datasets/train", 
+        datasets_train_path, 
         label_mode="categorical", 
         class_names=labels, 
         image_size=(IMG_HEIGHT, IMG_WIDTH), 
@@ -117,7 +128,7 @@ async def main():
         batch_size=BATCH_SIZE
     )
     datasets_validation = image_dataset_from_directory(
-        "datasets/validation", 
+        datasets_validation_path, 
         label_mode="categorical", 
         class_names=labels, 
         image_size=(IMG_HEIGHT, IMG_WIDTH), 
@@ -125,7 +136,7 @@ async def main():
         batch_size=BATCH_SIZE
     )
     datasets_test = image_dataset_from_directory(
-        "datasets/test", 
+        datasets_test_path, 
         label_mode="categorical", 
         class_names=labels, 
         image_size=(IMG_HEIGHT, IMG_WIDTH), 
