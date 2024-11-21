@@ -77,7 +77,7 @@ async def main():
         labels = file.readlines()
     labels_len = len(labels)
 
-    datasets_root_path = "datasets"
+    datasets_root_path = os.path.abspath("datasets")
 
     datasets_raw_path = os.path.join(datasets_root_path, "raw")
     datasets_train_path = os.path.join(datasets_root_path, "train")
@@ -86,11 +86,11 @@ async def main():
     
     for label in labels:
         crawler.tags_str = label
-        crawler.download_folder_path = datasets_raw_path.join(label)
+        crawler.download_folder_path = os.path.join(datasets_raw_path, label)
 
-        datasets_train_label_path = datasets_train_path.join(label)
-        datasets_validation_label_path = datasets_validation_path.join(label)
-        datasets_test_label_path = datasets_test_path.join(label)
+        datasets_train_label_path = os.path.join(datasets_train_path, label)
+        datasets_validation_label_path = os.path.join(datasets_validation_path, label)
+        datasets_test_label_path = os.path.join(datasets_test_path, label)
 
         if not os.path.exists(crawler.download_folder_path):
             urls = await crawler.get_image_urls_async()
@@ -113,11 +113,11 @@ async def main():
             os.mkdir(datasets_test_label_path)
 
         for path in paths_train:
-            shutil.copyfile(crawler.download_folder_path.join(path), datasets_train_label_path.join(path))
+            shutil.copyfile(os.path.join(crawler.download_folder_path, path), os.path.join(datasets_train_label_path, path))
         for path in paths_validation:
-            shutil.copyfile(crawler.download_folder_path.join(path), datasets_validation_label_path.join(path))
+            shutil.copyfile(os.path.join(crawler.download_folder_path, path), os.path.join.join(datasets_validation_label_path, path))
         for path in paths_test:
-            shutil.copyfile(crawler.download_folder_path.join(path), datasets_test_label_path.join(path))
+            shutil.copyfile(os.path.join(crawler.download_folder_path, path), os.path.join(datasets_test_label_path, path))
 
     datasets_train = image_dataset_from_directory(
         datasets_train_path, 
