@@ -33,12 +33,15 @@ def my_model(labels_len: int):
 
     x = Conv2D(16, (3, 3), activation='relu', padding='same')(x)
     x = Conv2D(16, (3, 3), activation='relu', padding='same')(x)
+    x = Conv2D(16, (3, 3), activation='relu', padding='same')(x)
     x = MaxPool2D((2, 2), strides=(3, 3))(x)
 
     x = Conv2D(32, (3, 3), activation='relu', padding='same')(x)
     x = Conv2D(32, (3, 3), activation='relu', padding='same')(x)
+    x = Conv2D(32, (3, 3), activation='relu', padding='same')(x)
     x = MaxPool2D((2, 2), strides=(3, 3))(x)
 
+    x = Conv2D(64, (3, 3), activation='relu', padding='same')(x)
     x = Conv2D(64, (3, 3), activation='relu', padding='same')(x)
     x = Conv2D(64, (3, 3), activation='relu', padding='same')(x)
     x = MaxPool2D((2, 2), strides=(3, 3))(x)
@@ -46,10 +49,6 @@ def my_model(labels_len: int):
     x = Flatten()(x)
     x = Dropout(0.2)(x)
 
-    x = Dense(4096, activation='relu')(x)
-    x = Dense(1024, activation='relu')(x)
-    x = Dense(512, activation='relu')(x)
-    x = Dense(256, activation='relu')(x)
     x = Dense(128, activation='relu')(x)
     x = Dense(64, activation='relu')(x)
 
